@@ -75,8 +75,7 @@ public class Main {
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Student ID: ");
-                    String id = scanner.nextLine();
+                    String id = getIdInput("Enter Student ID (numbers only): ");
                     System.out.print("Enter Name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter Email: ");
@@ -92,8 +91,7 @@ public class Main {
                     break;
                 case 2:
                     displayAllStudents();
-                    System.out.print("Enter Student ID to update: ");
-                    String updateId = scanner.nextLine();
+                    String updateId = getIdInput("Enter Student ID to update (numbers only): ");
                     System.out.print("Enter new Name: ");
                     String newName = scanner.nextLine();
                     System.out.print("Enter new Email: ");
@@ -102,8 +100,7 @@ public class Main {
                     break;
                 case 3:
                     displayAllStudents();
-                    System.out.print("Enter Student ID to remove: ");
-                    String removeId = scanner.nextLine();
+                    String removeId = getIdInput("Enter Student ID to remove (numbers only): ");
                     studentService.removeStudent(removeId);
                     break;
                 case 4:
@@ -111,8 +108,7 @@ public class Main {
                     break;
                 case 5:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String transcriptId = scanner.nextLine();
+                    String transcriptId = getIdInput("Enter Student ID (numbers only): ");
                     enrollmentService.getStudentTranscript(transcriptId);
                     break;
                 case 0:
@@ -139,8 +135,7 @@ public class Main {
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Instructor ID: ");
-                    String id = scanner.nextLine();
+                    String id = getIdInput("Enter Instructor ID (numbers only): ");
                     System.out.print("Enter Name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter Email: ");
@@ -151,8 +146,7 @@ public class Main {
                     break;
                 case 2:
                     displayAllInstructors();
-                    System.out.print("Enter Instructor ID to update: ");
-                    String updateId = scanner.nextLine();
+                    String updateId = getIdInput("Enter Instructor ID to update (numbers only): ");
                     System.out.print("Enter new Name: ");
                     String newName = scanner.nextLine();
                     System.out.print("Enter new Email: ");
@@ -161,8 +155,7 @@ public class Main {
                     break;
                 case 3:
                     displayAllInstructors();
-                    System.out.print("Enter Instructor ID to remove: ");
-                    String removeId = scanner.nextLine();
+                    String removeId = getIdInput("Enter Instructor ID to remove (numbers only): ");
                     instructorService.removeInstructor(removeId);
                     break;
                 case 4:
@@ -170,11 +163,9 @@ public class Main {
                     break;
                 case 5:
                     displayAllInstructors();
-                    System.out.print("Enter Instructor ID: ");
-                    String instrId = scanner.nextLine();
+                    String instrId = getIdInput("Enter Instructor ID (numbers only): ");
                     displayAllSections();
-                    System.out.print("Enter Section ID: ");
-                    String sectId = scanner.nextLine();
+                    String sectId = getIdInput("Enter Section ID (numbers only): ");
                     instructorService.assignInstructorToSection(instrId, sectId);
                     break;
                 case 0:
@@ -200,8 +191,7 @@ public class Main {
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Course ID: ");
-                    String id = scanner.nextLine();
+                    String id = getIdInput("Enter Course ID (numbers only): ");
                     System.out.print("Enter Course Name: ");
                     String name = scanner.nextLine();
                     int units = getIntInput("Enter Units: ");
@@ -209,16 +199,19 @@ public class Main {
                     Course course = new Course(id, name, units, fee);
                     displayAllCourses();
                     System.out.print("Enter Prerequisite Course ID (or press Enter to skip): ");
-                    String prereq = scanner.nextLine();
+                    String prereq = scanner.nextLine().trim();
                     if (!prereq.isEmpty()) {
-                        course.setPrerequisiteCourseId(prereq);
+                        if (!prereq.matches("[0-9]+")) {
+                            System.out.println("Invalid prerequisite ID. Must be numbers only. Prerequisite not set.");
+                        } else {
+                            course.setPrerequisiteCourseId(prereq);
+                        }
                     }
                     courseService.addCourse(course);
                     break;
                 case 2:
                     displayAllCourses();
-                    System.out.print("Enter Course ID to update: ");
-                    String updateId = scanner.nextLine();
+                    String updateId = getIdInput("Enter Course ID to update (numbers only): ");
                     System.out.print("Enter new Course Name: ");
                     String newName = scanner.nextLine();
                     int newUnits = getIntInput("Enter new Units: ");
@@ -227,8 +220,7 @@ public class Main {
                     break;
                 case 3:
                     displayAllCourses();
-                    System.out.print("Enter Course ID to remove: ");
-                    String removeId = scanner.nextLine();
+                    String removeId = getIdInput("Enter Course ID to remove (numbers only): ");
                     courseService.removeCourse(removeId);
                     break;
                 case 4:
@@ -257,14 +249,12 @@ public class Main {
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Section ID: ");
-                    String sectionId = scanner.nextLine();
-                    System.out.print("Enter Section Name: ");
+                    String sectionId = getIdInput("Enter Section ID (numbers only): ");
+                    System.out.print("Enter Section Name (e.g. BSIT-1A): ");
                     String sectionName = scanner.nextLine();
                     int capacity = getIntInput("Enter Max Capacity: ");
                     displayAllCourses();
-                    System.out.print("Enter Course ID: ");
-                    String courseId = scanner.nextLine();
+                    String courseId = getIdInput("Enter Course ID (numbers only): ");
                     Course course = courseService.getCourseById(courseId);
                     if (course == null) {
                         System.out.println("Error: Course ID " + courseId + " not found!");
@@ -273,8 +263,7 @@ public class Main {
                     System.out.print("Enter Schedule (e.g. MWF 8:00-9:00 AM): ");
                     String schedule = scanner.nextLine();
                     displayAllDepartments();
-                    System.out.print("Enter Department ID: ");
-                    String deptId = scanner.nextLine();
+                    String deptId = getIdInput("Enter Department ID (numbers only): ");
                     Section section = new Section(sectionId, sectionName, capacity, course);
                     section.setSchedule(schedule);
                     sections.add(section);
@@ -294,29 +283,23 @@ public class Main {
                     break;
                 case 2:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String studentId = scanner.nextLine();
+                    String studentId = getIdInput("Enter Student ID (numbers only): ");
                     displayAllSections();
-                    System.out.print("Enter Section ID: ");
-                    String sectId = scanner.nextLine();
+                    String sectId = getIdInput("Enter Section ID (numbers only): ");
                     enrollmentService.enrollStudentInSection(studentId, sectId);
                     break;
                 case 3:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String dropStudentId = scanner.nextLine();
+                    String dropStudentId = getIdInput("Enter Student ID (numbers only): ");
                     displayAllSections();
-                    System.out.print("Enter Section ID: ");
-                    String dropSectId = scanner.nextLine();
+                    String dropSectId = getIdInput("Enter Section ID (numbers only): ");
                     enrollmentService.dropStudentFromSection(dropStudentId, dropSectId);
                     break;
                 case 4:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String gradeStudentId = scanner.nextLine();
+                    String gradeStudentId = getIdInput("Enter Student ID (numbers only): ");
                     displayAllSections();
-                    System.out.print("Enter Section ID: ");
-                    String gradeSectId = scanner.nextLine();
+                    String gradeSectId = getIdInput("Enter Section ID (numbers only): ");
                     double grade = getDoubleInput("Enter Grade (0-100): ");
                     enrollmentService.recordGrade(gradeStudentId, gradeSectId, grade);
                     break;
@@ -345,8 +328,7 @@ public class Main {
             switch (choice) {
                 case 1:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String studentId = scanner.nextLine();
+                    String studentId = getIdInput("Enter Student ID (numbers only): ");
                     Student student = studentService.getStudentById(studentId);
                     if (student == null) {
                         System.out.println("Error: Student ID " + studentId + " not found!");
@@ -356,27 +338,23 @@ public class Main {
                     break;
                 case 2:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String discountId = scanner.nextLine();
+                    String discountId = getIdInput("Enter Student ID (numbers only): ");
                     tuitionService.applyScholarshipDiscount(discountId);
                     break;
                 case 3:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String payId = scanner.nextLine();
+                    String payId = getIdInput("Enter Student ID (numbers only): ");
                     double amount = getDoubleInput("Enter Payment Amount: ");
                     tuitionService.makePayment(payId, amount);
                     break;
                 case 4:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String balId = scanner.nextLine();
+                    String balId = getIdInput("Enter Student ID (numbers only): ");
                     System.out.println("Remaining Balance: " + tuitionService.getRemainingBalance(balId));
                     break;
                 case 5:
                     displayAllStudents();
-                    System.out.print("Enter Student ID: ");
-                    String recId = scanner.nextLine();
+                    String recId = getIdInput("Enter Student ID (numbers only): ");
                     tuitionService.displayPaymentRecord(recId);
                     break;
                 case 0:
@@ -400,8 +378,7 @@ public class Main {
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Department ID: ");
-                    String deptId = scanner.nextLine();
+                    String deptId = getIdInput("Enter Department ID (numbers only): ");
                     System.out.print("Enter Department Name: ");
                     String deptName = scanner.nextLine();
                     departments.add(new Department(deptId, deptName));
@@ -427,7 +404,6 @@ public class Main {
         } else {
             System.out.println("--- Available Students ---");
             for (Student s : students) {
-                // Check if student is enrolled in any section
                 boolean enrolled = false;
                 List<String> enrolledIn = new ArrayList<>();
                 for (Section sec : sections) {
@@ -436,8 +412,13 @@ public class Main {
                         enrolledIn.add(sec.getSectionName());
                     }
                 }
-                String enrollmentStatus = enrolled ? "Enrolled in: " + String.join(", ", enrolledIn) : "Not enrolled in any section";
-                System.out.println("  ID: " + s.getStudentId() + " | Name: " + s.getName() + " | Scholarship: " + s.getScholarshipType() + " | " + enrollmentStatus);
+                String enrollmentStatus = enrolled
+                        ? "Enrolled in: " + String.join(", ", enrolledIn)
+                        : "Not enrolled in any section";
+                System.out.println("  ID: " + s.getStudentId()
+                        + " | Name: " + s.getName()
+                        + " | Scholarship: " + s.getScholarshipType()
+                        + " | " + enrollmentStatus);
             }
         }
     }
@@ -449,7 +430,9 @@ public class Main {
         } else {
             System.out.println("--- Available Instructors ---");
             for (Instructor i : instructors) {
-                System.out.println("  ID: " + i.getInstructorId() + " | Name: " + i.getName() + " | Department: " + i.getDepartment());
+                System.out.println("  ID: " + i.getInstructorId()
+                        + " | Name: " + i.getName()
+                        + " | Department: " + i.getDepartment());
             }
         }
     }
@@ -461,7 +444,11 @@ public class Main {
         } else {
             System.out.println("--- Available Courses ---");
             for (Course c : courses) {
-                System.out.println("  ID: " + c.getCourseId() + " | Name: " + c.getCourseName() + " | Units: " + c.getUnits() + " | Fee/Unit: " + c.getFeePerUnit() + " | Prerequisite: " + (c.getPrerequisiteCourseId() != null ? c.getPrerequisiteCourseId() : "None"));
+                System.out.println("  ID: " + c.getCourseId()
+                        + " | Name: " + c.getCourseName()
+                        + " | Units: " + c.getUnits()
+                        + " | Fee/Unit: " + c.getFeePerUnit()
+                        + " | Prerequisite: " + (c.getPrerequisiteCourseId() != null ? c.getPrerequisiteCourseId() : "None"));
             }
         }
     }
@@ -472,7 +459,12 @@ public class Main {
         } else {
             System.out.println("--- Available Sections ---");
             for (Section s : sections) {
-                System.out.println("  ID: " + s.getSectionId() + " | Name: " + s.getSectionName() + " | Course: " + s.getCourse().getCourseName() + " | Instructor: " + (s.getInstructor() != null ? s.getInstructor().getName() : "TBA") + " | Schedule: " + s.getSchedule() + " | Enrolled: " + s.getCurrentEnrollment() + "/" + s.getMaxCapacity());
+                System.out.println("  ID: " + s.getSectionId()
+                        + " | Name: " + s.getSectionName()
+                        + " | Course: " + s.getCourse().getCourseName()
+                        + " | Instructor: " + (s.getInstructor() != null ? s.getInstructor().getName() : "TBA")
+                        + " | Schedule: " + s.getSchedule()
+                        + " | Enrolled: " + s.getCurrentEnrollment() + "/" + s.getMaxCapacity());
             }
         }
     }
@@ -483,12 +475,28 @@ public class Main {
         } else {
             System.out.println("--- Available Departments ---");
             for (Department d : departments) {
-                System.out.println("  ID: " + d.getDepartmentId() + " | Name: " + d.getDepartmentName() + " | Sections: " + d.getSections().size());
+                System.out.println("  ID: " + d.getDepartmentId()
+                        + " | Name: " + d.getDepartmentName()
+                        + " | Sections: " + d.getSections().size());
             }
         }
     }
 
     // =================== INPUT HELPERS ===================
+    static String getIdInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Invalid input. ID cannot be empty.");
+            } else if (!input.matches("[0-9]+")) {
+                System.out.println("Invalid input. ID must contain numbers only.");
+            } else {
+                return input;
+            }
+        }
+    }
+
     static int getIntInput(String prompt) {
         while (true) {
             try {
